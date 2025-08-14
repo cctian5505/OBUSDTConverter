@@ -1,10 +1,10 @@
 //My Rates
-const etopShardsSellRate = 34;
 const etopShardsBuyRate = 32;
-const vptopShardsSellRate = 0.55;
+const etopShardsSellRate = 34;
 const vptopShardsBuyRate = 0.5;
-const csgoEmpireCoinSellRate = 36;
+const vptopShardsSellRate = 0.55;
 const csgoEmpireCoinBuyRate = 34;
+const csgoEmpireCoinSellRate = 36;
 
 // Allowance
 const buyAllowance = -0.001;
@@ -15,33 +15,45 @@ const p2pBuyEl = document.getElementById("p2p-buy-el");
 const p2pSellEl = document.getElementById("p2p-sell-el");
 const quantityEl = document.getElementById("quantity-el");
 const etopShardsBtnEl = document.getElementById("etop-shards-btn-el");
+const vptopShardsBtnEl = document.getElementById("vptop-shards-btn-el");
+const csgoEmpireCoinBtnEl = document.getElementById("csgo-empire-coin-btn-el");
 
-function compute() {
-  console.log(p2pBuyValue);
-}
-
-// 57.28
-// 57.17
+// 57.28 BUY
+// 57.17 SELL
 
 // 34.0340 BUY
 // 31.9680 SELL
 
-function getInputValue() {
+function process() {
   quantityValue = Number(quantityEl.value);
   p2pBuyValue = Number(p2pBuyEl.value);
   p2pSellValue = Number(p2pSellEl.value);
+
+  totalBuyAmount = (quantityValue * Number(buyRate)) / p2pBuyValue;
+  totalSellAmount = (quantityValue * Number(sellRate)) / p2pSellValue;
+
+  console.log(totalBuyAmount);
+  console.log(totalSellAmount);
 }
 
 function etopShardsComputation() {
-  getInputValue();
-  // p2pBuyValue = Number(p2pBuyEl.value);
-  // p2pSellValue = Number(p2pSellEl.value);
-  const totalBuyRate = etopShardsBuyRate + etopShardsBuyRate * buyAllowance;
-  const totalSellRate = etopShardsSellRate + etopShardsSellRate * sellAllowance;
+  buyRate = etopShardsBuyRate + etopShardsBuyRate * buyAllowance;
+  sellRate = etopShardsSellRate + etopShardsSellRate * sellAllowance;
+  process();
+}
 
-  console.log(p2pBuyValue);
-  console.log(totalSellRate);
-  console.log(`Total Buy Rate ${(quantityValue * totalBuyRate) / p2pBuyValue}`);
+function vptopShardsComputation() {
+  buyRate = vptopShardsBuyRate + vptopShardsBuyRate * buyAllowance;
+  sellRate = vptopShardsSellRate + vptopShardsSellRate * sellAllowance;
+  process();
+}
+
+function csgoEmpireCoinComputation() {
+  buyRate = csgoEmpireCoinBuyRate + csgoEmpireCoinBuyRate * buyAllowance;
+  sellRate = csgoEmpireCoinSellRate + csgoEmpireCoinSellRate * sellAllowance;
+  process();
 }
 
 etopShardsBtnEl.addEventListener("click", etopShardsComputation);
+vptopShardsBtnEl.addEventListener("click", vptopShardsComputation);
+csgoEmpireCoinBtnEl.addEventListener("click", csgoEmpireCoinComputation);
