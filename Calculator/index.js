@@ -29,11 +29,13 @@ function process() {
   p2pBuyValue = Number(p2pBuyEl.value);
   p2pSellValue = Number(p2pSellEl.value);
 
-  totalBuyAmount = (quantityValue * Number(buyRate)) / p2pBuyValue;
-  totalSellAmount = (quantityValue * Number(sellRate)) / p2pSellValue;
+  let totalBuyAmount = (quantityValue * Number(buyRate)) / p2pBuyValue;
+  let floorTotalBuyAmount = Math.floor(totalBuyAmount * 100) / 100;
+  let totalSellAmount = (quantityValue * Number(sellRate)) / p2pSellValue;
+  let ceilSellAmount = Math.ceil(totalSellAmount * 100) / 100;
 
-  console.log(totalBuyAmount);
-  console.log(totalSellAmount);
+  console.log(floorTotalBuyAmount);
+  console.log(ceilSellAmount);
 }
 
 function etopShardsComputation() {
@@ -57,3 +59,6 @@ function csgoEmpireCoinComputation() {
 etopShardsBtnEl.addEventListener("click", etopShardsComputation);
 vptopShardsBtnEl.addEventListener("click", vptopShardsComputation);
 csgoEmpireCoinBtnEl.addEventListener("click", csgoEmpireCoinComputation);
+
+// 11.85963687150838 BUY ---> 11.85
+// 12.6066118593668 SELL ---> 11.61
