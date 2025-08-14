@@ -12,22 +12,34 @@
       <div class="input-here">
         <!-- P2P BUY -->
         <p>P2P BUY</p>
-        <input type="text" id="p2p-buy-el" />
+        <input type="number" id="p2p-buy-el" />
       </div>
       <div class="input-here">
         <!-- P2P SELL -->
         <p>P2P SELL</p>
-        <input type="text" id="p2p-sell-el" />
+        <input type="number" id="p2p-sell-el" />
       </div>
       <div class="input-here">
         <!-- Quantity -->
         <p>Quantity</p>
-        <input type="text" id="quantity-el" />
+        <input type="number" id="quantity-el" />
       </div>
     </div>
     <button id="etop-shards-btn-el">ETOP SHARDS</button>
     <button id="vptop-shards-btn-el">VPTOP SHARDS</button>
     <button id="csgo-empire-coin-btn-el">CSGO EMPIRE COIN</button>
+    <div id="result-el">
+      <div id="buy-result">
+        <p>${site} BUYING RATE AS OF ${dateNow()}</p>
+        <p>Total</p>
+        <p>${quantityValue} ${site} = ${floorTotalBuyAmount} USDT</p>
+      </div>
+      <div id="sell-result">
+        <p>${site} SELLING RATE AS OF ${dateNow()}</p>
+        <p>Total</p>
+        <p>${quantityValue} ${site} = ${ceilSellAmount} USDT</p>
+      </div>
+    </div>
     <script src="index.js"></script>
   </body>
 </html>

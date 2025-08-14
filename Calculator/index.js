@@ -17,12 +17,34 @@ const quantityEl = document.getElementById("quantity-el");
 const etopShardsBtnEl = document.getElementById("etop-shards-btn-el");
 const vptopShardsBtnEl = document.getElementById("vptop-shards-btn-el");
 const csgoEmpireCoinBtnEl = document.getElementById("csgo-empire-coin-btn-el");
+const resultEL = document.getElementById("result-el");
 
-// 57.28 BUY
-// 57.17 SELL
+function dateNow() {
+  let now = new Date();
 
-// 34.0340 BUY
-// 31.9680 SELL
+  let months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  let formattedDate = `${months[now.getMonth()]}/${String(
+    now.getDate()
+  ).padStart(2, "0")}/${String(now.getFullYear()).slice(-2)} ${String(
+    now.getHours()
+  ).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+
+  return formattedDate;
+}
 
 function process() {
   quantityValue = Number(quantityEl.value);
@@ -34,31 +56,43 @@ function process() {
   let totalSellAmount = (quantityValue * Number(sellRate)) / p2pSellValue;
   let ceilSellAmount = Math.ceil(totalSellAmount * 100) / 100;
 
-  console.log(floorTotalBuyAmount);
-  console.log(ceilSellAmount);
+  result = `
+    <div id="buy-result">
+      <p>${site} BUYING RATE AS OF ${dateNow()}</p>
+      <p>Total</p>
+      <p>${quantityValue} ${site} = ${floorTotalBuyAmount} USDT</p>
+    </div>
+    <div id="sell-result">
+      <p>${site} SELLING RATE AS OF ${dateNow()}</p>
+      <p>Total</p>
+      <p>${quantityValue} ${site} = ${ceilSellAmount} USDT</p>
+    </div>
+      `;
+
+  resultEL.innerHTML = result;
 }
 
 function etopShardsComputation() {
   buyRate = etopShardsBuyRate + etopShardsBuyRate * buyAllowance;
   sellRate = etopShardsSellRate + etopShardsSellRate * sellAllowance;
+  site = "ETOP FUN SHARDS";
   process();
 }
 
 function vptopShardsComputation() {
   buyRate = vptopShardsBuyRate + vptopShardsBuyRate * buyAllowance;
   sellRate = vptopShardsSellRate + vptopShardsSellRate * sellAllowance;
+  site = "VPTOP SHARDS";
   process();
 }
 
 function csgoEmpireCoinComputation() {
   buyRate = csgoEmpireCoinBuyRate + csgoEmpireCoinBuyRate * buyAllowance;
   sellRate = csgoEmpireCoinSellRate + csgoEmpireCoinSellRate * sellAllowance;
+  site = "CSGO EMPIRE COINS";
   process();
 }
 
 etopShardsBtnEl.addEventListener("click", etopShardsComputation);
 vptopShardsBtnEl.addEventListener("click", vptopShardsComputation);
 csgoEmpireCoinBtnEl.addEventListener("click", csgoEmpireCoinComputation);
-
-// 11.85963687150838 BUY ---> 11.85
-// 12.6066118593668 SELL ---> 11.61

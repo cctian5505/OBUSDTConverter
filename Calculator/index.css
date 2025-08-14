@@ -20,6 +20,7 @@ body {
   align-items: center;
   width: 100%;
   justify-content: end;
+  margin-top: 5px;
 }
 
 .input-here p {
@@ -52,31 +53,18 @@ button:hover {
   color: black;
 }
 
-/* For mobile responsiveness */
-@media (max-width: 480px) {
-  .container {
-    padding: 15px;
-  }
+#result-el {
+  margin-top: 15px;
+  font-size: 12px;
+  border: 1px solid black;
+  padding: 10px;
+  border-radius: 10px;
+}
 
-  h1 {
-    font-size: 20px;
-  }
+#result-el div {
+  margin-bottom: 25px;
+}
 
-  h2 {
-    font-size: 16px;
-  }
-
-  .option-button {
-    font-size: 12px;
-    padding: 10px 5px;
-  }
-
-  .rate-editor-controls {
-    flex-direction: column;
-  }
-
-  .rate-editor-input,
-  .rate-editor-button {
-    width: 100%;
-  }
+.result-title {
+  align-items: center;
 }
