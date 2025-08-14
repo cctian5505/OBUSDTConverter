@@ -68,3 +68,8 @@ button:hover {
 .result-title {
   align-items: center;
 }
+
+#rate-summary {
+  font-style: italic;
+  font-size: 10px;
+}

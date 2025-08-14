@@ -67,6 +67,10 @@ function process() {
       <p>Total</p>
       <p>${quantityValue} ${site} = ${ceilSellAmount} USDT</p>
     </div>
+    <div id="rate-summary">
+      <p><strong>CURRENT BUY RATE : ${currentBuyRate}</strong></p>
+      <p><strong>CURRENT SELL RATE : ${currentSellRate}</strong></p>
+    </div>
       `;
 
   resultEL.innerHTML = result;
@@ -76,6 +80,8 @@ function etopShardsComputation() {
   buyRate = etopShardsBuyRate + etopShardsBuyRate * buyAllowance;
   sellRate = etopShardsSellRate + etopShardsSellRate * sellAllowance;
   site = "ETOP FUN SHARDS";
+  currentBuyRate = etopShardsBuyRate;
+  currentSellRate = etopShardsSellRate;
   process();
 }
 
@@ -83,6 +89,8 @@ function vptopShardsComputation() {
   buyRate = vptopShardsBuyRate + vptopShardsBuyRate * buyAllowance;
   sellRate = vptopShardsSellRate + vptopShardsSellRate * sellAllowance;
   site = "VPTOP SHARDS";
+  currentBuyRate = vptopShardsBuyRate;
+  currentSellRate = vptopShardsSellRate;
   process();
 }
 
@@ -90,6 +98,8 @@ function csgoEmpireCoinComputation() {
   buyRate = csgoEmpireCoinBuyRate + csgoEmpireCoinBuyRate * buyAllowance;
   sellRate = csgoEmpireCoinSellRate + csgoEmpireCoinSellRate * sellAllowance;
   site = "CSGO EMPIRE COINS";
+  currentBuyRate = csgoEmpireCoinBuyRate;
+  currentSellRate = csgoEmpireCoinSellRate;
   process();
 }
 
