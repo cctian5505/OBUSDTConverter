@@ -74,6 +74,33 @@ function process() {
       `;
 
   resultEL.innerHTML = result;
+  // Copy to Clipboard The Buying
+  document.getElementById("buy-result").addEventListener("click", function () {
+    let textToCopy = this.textContent;
+
+    navigator.clipboard
+      .writeText(textToCopy)
+      .then(() => {
+        alert("Copied to clipboard: " + textToCopy);
+      })
+      .catch((err) => {
+        console.error("Failed to copy: ", err);
+      });
+  });
+
+  // Copy to Clipboard The Sell
+  document.getElementById("sell-result").addEventListener("click", function () {
+    let textToCopy = this.textContent;
+
+    navigator.clipboard
+      .writeText(textToCopy)
+      .then(() => {
+        alert("Copied to clipboard: " + textToCopy);
+      })
+      .catch((err) => {
+        console.error("Failed to copy: ", err);
+      });
+  });
 }
 
 function etopShardsComputation() {
