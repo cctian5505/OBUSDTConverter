@@ -5,6 +5,8 @@ const vptopShardsBuyRate = 0.5;
 const vptopShardsSellRate = 0.55;
 const csgoEmpireCoinBuyRate = 34;
 const csgoEmpireCoinSellRate = 36;
+const phpBuyRate = 1;
+const sellBuyRate = 1;
 
 // Allowance
 const buyAllowance = -0.001;
@@ -17,6 +19,7 @@ const quantityEl = document.getElementById("quantity-el");
 const etopShardsBtnEl = document.getElementById("etop-shards-btn-el");
 const vptopShardsBtnEl = document.getElementById("vptop-shards-btn-el");
 const csgoEmpireCoinBtnEl = document.getElementById("csgo-empire-coin-btn-el");
+const phpBtnEl = document.getElementById("php-btn-el");
 const resultEL = document.getElementById("result-el");
 
 function dateNow() {
@@ -59,12 +62,14 @@ function process() {
   result = `
     <div id="buy-result">
 <p>🟢 ${site} BUYING RATE AS OF ${dateNow()} 🟢</p>
-<p>Total</p>
+<p> </p>
+<p><br>Total</p>
 <p>${quantityValue} ${site} = ${floorTotalBuyAmount} USDT</p>
     </div>
     <div id="sell-result">
 <p>🟢 ${site} SELLING RATE AS OF ${dateNow()} 🟢</p>
-<p>Total</p>
+<p> </p>
+<p><br>Total</p>
 <p>${quantityValue} ${site} = ${ceilSellAmount} USDT</p>
     </div>
     <div id="rate-summary">
@@ -130,6 +135,19 @@ function csgoEmpireCoinComputation() {
   process();
 }
 
+function phpComputation() {
+  // const phpBuyRate = 1;
+  // const sellBuyRate = 1;
+
+  buyRate = phpBuyRate + phpBuyRate * buyAllowance;
+  sellRate = sellBuyRate + sellBuyRate * sellAllowance;
+  site = "PHP";
+  currentBuyRate = phpBuyRate;
+  currentSellRate = sellBuyRate;
+  process();
+}
+
 etopShardsBtnEl.addEventListener("click", etopShardsComputation);
 vptopShardsBtnEl.addEventListener("click", vptopShardsComputation);
 csgoEmpireCoinBtnEl.addEventListener("click", csgoEmpireCoinComputation);
+phpBtnEl.addEventListener("click", phpComputation);
