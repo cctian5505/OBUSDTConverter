@@ -58,14 +58,14 @@ function process() {
 
   result = `
     <div id="buy-result">
-      <p>${site} BUYING RATE AS OF ${dateNow()}</p>
-      <p>Total</p>
-      <p>${quantityValue} ${site} = ${floorTotalBuyAmount} USDT</p>
+<p>🟢 ${site} BUYING RATE AS OF ${dateNow()} 🟢</p>
+<p>Total</p>
+<p>${quantityValue} ${site} = ${floorTotalBuyAmount} USDT</p>
     </div>
     <div id="sell-result">
-      <p>${site} SELLING RATE AS OF ${dateNow()}</p>
-      <p>Total</p>
-      <p>${quantityValue} ${site} = ${ceilSellAmount} USDT</p>
+<p>🟢 ${site} SELLING RATE AS OF ${dateNow()} 🟢</p>
+<p>Total</p>
+<p>${quantityValue} ${site} = ${ceilSellAmount} USDT</p>
     </div>
     <div id="rate-summary">
       <p><strong>CURRENT BUY RATE : ${currentBuyRate}</strong></p>
