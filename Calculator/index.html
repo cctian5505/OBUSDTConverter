@@ -1,41 +1,722 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="index.css" />
-  </head>
-  <body>
-    <h4>
-      <a
-        href="https://p2p.binance.com/trade/all-payments/USDT?fiat=PHP"
-        target="_blank"
-        >OB - USDT CONVERTER</a
-      >
-    </h4>
-    <div id="input-data">
-      <div class="input-here">
-        <!-- P2P BUY -->
-        <p>P2P BUY</p>
-        <input type="number" id="p2p-buy-el" />
-      </div>
-      <div class="input-here">
-        <!-- P2P SELL -->
-        <p>P2P SELL</p>
-        <input type="number" id="p2p-sell-el" />
-      </div>
-      <div class="input-here">
-        <!-- Quantity -->
-        <p>Quantity</p>
-        <input type="number" id="quantity-el" />
-      </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USDT Conversion Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #fff;
+            font-size: 24px;
+        }
+
+        .input-section {
+            background: #1a1a1a;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #b0b0b0;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            background: #0a0a0a;
+            border: 1px solid #333;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 15px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .toggle-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 12px;
+            background: #0a0a0a;
+            border: 2px solid #333;
+            border-radius: 6px;
+            color: #b0b0b0;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .toggle-btn:hover {
+            border-color: #4CAF50;
+            color: #fff;
+        }
+
+        .toggle-btn.active {
+            background: #4CAF50;
+            border-color: #4CAF50;
+            color: #fff;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            background: #4CAF50;
+            border: none;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        button.secondary {
+            background: #555;
+        }
+
+        button.secondary:hover {
+            background: #666;
+        }
+
+        .results {
+            margin-top: 20px;
+        }
+
+        .result-box {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 2px solid #333;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .result-box:hover {
+            border-color: #4CAF50;
+            transform: translateY(-2px);
+        }
+
+        .result-box.copied::after {
+            content: "✓ Copied!";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #4CAF50;
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            animation: fadeOut 2s forwards;
+        }
+
+        @keyframes fadeOut {
+            0%, 50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .result-content {
+            color: #fff;
+            font-size: 15px;
+            line-height: 1.6;
+            white-space: pre-line;
+        }
+
+        .rate-info {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #333;
+            color: #b0b0b0;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-header h2 {
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .close-btn {
+            background: none;
+            color: #999;
+            font-size: 28px;
+            cursor: pointer;
+            border: none;
+            padding: 0;
+            width: auto;
+            line-height: 1;
+        }
+
+        .close-btn:hover {
+            color: #fff;
+        }
+
+        .rate-group {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #333;
+        }
+
+        .rate-group:last-child {
+            border-bottom: none;
+        }
+
+        .rate-group h3 {
+            color: #4CAF50;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .rate-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .rate-inputs .input-group {
+            margin-bottom: 0;
+        }
+
+        .rate-inputs label {
+            font-size: 11px;
+        }
+
+        .rate-inputs input {
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .input-section {
+                padding: 20px;
+            }
+
+            .toggle-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💱 USDT Conversion Calculator</h1>
+
+        <div class="input-section">
+            <div class="input-group">
+                <label>Binance USDT Current Buy</label>
+                <input type="number" id="binanceBuy" step="0.01" placeholder="Enter buy rate">
+            </div>
+
+            <div class="input-group">
+                <label>Binance USDT Current Sell</label>
+                <input type="number" id="binanceSell" step="0.01" placeholder="Enter sell rate">
+            </div>
+
+            <label>Input Mode</label>
+            <div class="toggle-group">
+                <div class="toggle-btn active" onclick="setInputMode('quantity')">Quantity</div>
+                <div class="toggle-btn" onclick="setInputMode('usdt')">USDT</div>
+            </div>
+
+            <div class="input-group">
+                <label id="inputLabel">Quantity</label>
+                <input type="number" id="inputValue" step="0.01" placeholder="Enter value">
+            </div>
+
+            <div class="input-group">
+                <label>Conversion Type</label>
+                <select id="conversionType">
+                    <option value="ETOP_SHARDS">ETOP SHARDS</option>
+                    <option value="COINS">COINS</option>
+                    <option value="VPTOP_SHARDS">VPTOP SHARDS</option>
+                    <option value="PHP">PHP</option>
+                </select>
+            </div>
+
+            <div class="button-group">
+                <button onclick="calculate()">Calculate</button>
+                <button class="secondary" onclick="openModal()">Edit Rates</button>
+                <button class="secondary" onclick="openAddProductModal()">Add Product</button>
+            </div>
+        </div>
+
+        <div class="results" id="results"></div>
     </div>
-    <button id="etop-shards-btn-el">ETOP SHARDS</button>
-    <button id="vptop-shards-btn-el">VPTOP SHARDS</button>
-    <button id="csgo-empire-coin-btn-el">CSGO EMPIRE COIN</button>
-    <button id="php-btn-el">PHP</button>
-    <div id="result-el"></div>
-    <script src="index.js"></script>
-  </body>
+
+    <div class="modal" id="ratesModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Conversion Rates</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="ratesForm"></div>
+            <div class="button-group">
+                <button onclick="saveRates()">Save Rates</button>
+                <button class="secondary" onclick="resetRates()">Reset to Default</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="addProductModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Product</h2>
+                <button class="close-btn" onclick="closeAddProductModal()">&times;</button>
+            </div>
+            <div class="input-group">
+                <label>Product Name</label>
+                <input type="text" id="newProductName" placeholder="e.g., STEAM WALLET">
+            </div>
+            <div class="rate-inputs">
+                <div class="input-group">
+                    <label>Buy Rate</label>
+                    <input type="number" step="0.01" id="newProductBuy" placeholder="Buy rate">
+                </div>
+                <div class="input-group">
+                    <label>Sell Rate</label>
+                    <input type="number" step="0.01" id="newProductSell" placeholder="Sell rate">
+                </div>
+            </div>
+            <div class="button-group">
+                <button onclick="addNewProduct()">Add Product</button>
+                <button class="secondary" onclick="closeAddProductModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration object
+        const DEFAULT_RATES = {
+            ETOP_SHARDS: {
+                name: 'ETOP SHARDS',
+                sell: 34,
+                buy: 32
+            },
+            COINS: {
+                name: 'COINS',
+                sell: 36,
+                buy: 34
+            },
+            VPTOP_SHARDS: {
+                name: 'VPTOP SHARDS',
+                sell: 0.55,
+                buy: 0.5
+            },
+            PHP: {
+                name: 'PHP',
+                sell: 1,
+                buy: 1
+            }
+        };
+
+        // Allowances
+        const ALLOWANCES = {
+            buy: -0.001,   // -0.10%
+            sell: 0.001    // +0.10%
+        };
+
+        // Current input mode
+        let inputMode = 'quantity';
+
+        // Load rates from localStorage or use defaults
+        function loadRates() {
+            const saved = localStorage.getItem('conversionRates');
+            return saved ? JSON.parse(saved) : { ...DEFAULT_RATES };
+        }
+
+        // Save rates to localStorage
+        function saveRatesToStorage(rates) {
+            localStorage.setItem('conversionRates', JSON.stringify(rates));
+        }
+
+        let conversionRates = loadRates();
+
+        // Toggle input mode
+        function setInputMode(mode) {
+            inputMode = mode;
+            const buttons = document.querySelectorAll('.toggle-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const label = document.getElementById('inputLabel');
+            const input = document.getElementById('inputValue');
+            
+            if (mode === 'quantity') {
+                label.textContent = 'Quantity';
+                input.placeholder = 'Enter quantity';
+            } else {
+                label.textContent = 'USDT Amount';
+                input.placeholder = 'Enter USDT amount';
+            }
+        }
+
+        // Format timestamp
+        function getTimestamp() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            return `${year}/${month}/${day} ${hours}:${minutes}`;
+        }
+
+        // Calculate conversion
+        function calculate() {
+            const binanceBuy = parseFloat(document.getElementById('binanceBuy').value);
+            const binanceSell = parseFloat(document.getElementById('binanceSell').value);
+            const inputValue = parseFloat(document.getElementById('inputValue').value);
+            const conversionType = document.getElementById('conversionType').value;
+
+            if (!binanceBuy || !binanceSell || !inputValue) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            const conversion = conversionRates[conversionType];
+            const timestamp = getTimestamp();
+
+            // Apply allowance to rates
+            const buyRate = conversion.buy * (1 + ALLOWANCES.buy);
+            const sellRate = conversion.sell * (1 + ALLOWANCES.sell);
+
+            let buyingResult, sellingResult;
+
+            if (inputMode === 'quantity') {
+                // User entered quantity
+                const quantity = inputValue;
+                
+                // Buying: (Quantity * BUY_RATE) / BINANCE_CURRENT_BUY
+                const buyingUSDT = (quantity * buyRate) / binanceBuy;
+                
+                // Selling: (Quantity * SELL_RATE) / BINANCE_CURRENT_SELL
+                const sellingUSDT = (quantity * sellRate) / binanceSell;
+
+                buyingResult = `🟢 ${conversion.name} BUYING RATE AS OF ${timestamp} 🟢
+TOTAL:
+${quantity} ${conversion.name} = ${buyingUSDT.toFixed(2)} USDT`;
+
+                sellingResult = `🟢 ${conversion.name} SELLING RATE AS OF ${timestamp} 🟢
+TOTAL:
+${quantity} ${conversion.name} = ${sellingUSDT.toFixed(2)} USDT`;
+
+            } else {
+                // User entered USDT
+                const usdt = inputValue;
+                
+                // Buying: (USDT * BINANCE_CURRENT_BUY) / BUY_RATE
+                const buyingQuantity = (usdt * binanceBuy) / buyRate;
+                
+                // Selling: (USDT * BINANCE_CURRENT_SELL) / SELL_RATE
+                const sellingQuantity = (usdt * binanceSell) / sellRate;
+
+                buyingResult = `🟢 ${conversion.name} BUYING RATE AS OF ${timestamp} 🟢
+TOTAL:
+${usdt} USDT = ${buyingQuantity.toFixed(2)} ${conversion.name}`;
+
+                sellingResult = `🟢 ${conversion.name} SELLING RATE AS OF ${timestamp} 🟢
+TOTAL:
+${usdt} USDT = ${sellingQuantity.toFixed(2)} ${conversion.name}`;
+            }
+
+            displayResults(buyingResult, sellingResult);
+        }
+
+        // Display results
+        function displayResults(buyingResult, sellingResult) {
+            const conversionType = document.getElementById('conversionType').value;
+            const conversion = conversionRates[conversionType];
+            
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `
+                <div class="result-box" onclick="copyToClipboard(this)">
+                    <div class="result-content">${buyingResult}</div>
+                </div>
+                <div class="result-box" onclick="copyToClipboard(this)">
+                    <div class="result-content">${sellingResult}</div>
+                </div>
+                <div class="rate-info">
+                    CURRENT BUY RATE : ${conversion.buy}<br>
+                    CURRENT SELL RATE : ${conversion.sell}
+                </div>
+            `;
+        }
+
+        // Copy to clipboard
+        function copyToClipboard(element) {
+            const text = element.querySelector('.result-content').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                element.classList.add('copied');
+                setTimeout(() => {
+                    element.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Open modal
+        function openModal() {
+            const modal = document.getElementById('ratesModal');
+            const form = document.getElementById('ratesForm');
+            
+            form.innerHTML = '';
+            for (const [key, value] of Object.entries(conversionRates)) {
+                const isDefault = DEFAULT_RATES[key] !== undefined;
+                const deleteBtn = !isDefault ? `<button class="secondary" onclick="deleteProduct('${key}')" style="margin-top: 10px; width: 100%;">Delete Product</button>` : '';
+                
+                form.innerHTML += `
+                    <div class="rate-group">
+                        <h3>${value.name}</h3>
+                        <div class="rate-inputs">
+                            <div class="input-group">
+                                <label>Sell Rate</label>
+                                <input type="number" step="0.01" id="${key}_sell" value="${value.sell}">
+                            </div>
+                            <div class="input-group">
+                                <label>Buy Rate</label>
+                                <input type="number" step="0.01" id="${key}_buy" value="${value.buy}">
+                            </div>
+                        </div>
+                        ${deleteBtn}
+                    </div>
+                `;
+            }
+            
+            modal.classList.add('active');
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('ratesModal').classList.remove('active');
+        }
+
+        // Save rates
+        function saveRates() {
+            for (const key of Object.keys(conversionRates)) {
+                const sellRate = parseFloat(document.getElementById(`${key}_sell`).value);
+                const buyRate = parseFloat(document.getElementById(`${key}_buy`).value);
+                
+                if (!isNaN(sellRate) && !isNaN(buyRate)) {
+                    conversionRates[key].sell = sellRate;
+                    conversionRates[key].buy = buyRate;
+                }
+            }
+            
+            saveRatesToStorage(conversionRates);
+            closeModal();
+            alert('Rates saved successfully!');
+        }
+
+        // Reset to default rates
+        function resetRates() {
+            if (confirm('Are you sure you want to reset all rates to default values?')) {
+                conversionRates = { ...DEFAULT_RATES };
+                saveRatesToStorage(conversionRates);
+                openModal();
+                alert('Rates reset to default values!');
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('ratesModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        document.getElementById('addProductModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAddProductModal();
+            }
+        });
+
+        // Open add product modal
+        function openAddProductModal() {
+            document.getElementById('newProductName').value = '';
+            document.getElementById('newProductBuy').value = '';
+            document.getElementById('newProductSell').value = '';
+            document.getElementById('addProductModal').classList.add('active');
+        }
+
+        // Close add product modal
+        function closeAddProductModal() {
+            document.getElementById('addProductModal').classList.remove('active');
+        }
+
+        // Add new product
+        function addNewProduct() {
+            const name = document.getElementById('newProductName').value.trim();
+            const buyRate = parseFloat(document.getElementById('newProductBuy').value);
+            const sellRate = parseFloat(document.getElementById('newProductSell').value);
+
+            if (!name) {
+                alert('Please enter a product name');
+                return;
+            }
+
+            if (isNaN(buyRate) || isNaN(sellRate)) {
+                alert('Please enter valid buy and sell rates');
+                return;
+            }
+
+            // Create key from name (uppercase, replace spaces with underscores)
+            const key = name.toUpperCase().replace(/\s+/g, '_');
+
+            // Check if product already exists
+            if (conversionRates[key]) {
+                alert('A product with this name already exists');
+                return;
+            }
+
+            // Add new product
+            conversionRates[key] = {
+                name: name.toUpperCase(),
+                buy: buyRate,
+                sell: sellRate
+            };
+
+            // Save to localStorage
+            saveRatesToStorage(conversionRates);
+
+            // Update dropdown
+            updateDropdown();
+
+            // Close modal
+            closeAddProductModal();
+
+            alert('Product added successfully!');
+        }
+
+        // Update dropdown with current products
+        function updateDropdown() {
+            const dropdown = document.getElementById('conversionType');
+            dropdown.innerHTML = '';
+
+            for (const [key, value] of Object.entries(conversionRates)) {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = value.name;
+                dropdown.appendChild(option);
+            }
+        }
+
+        // Delete product
+        function deleteProduct(key) {
+            if (DEFAULT_RATES[key]) {
+                alert('Cannot delete default products');
+                return;
+            }
+
+            if (confirm(`Are you sure you want to delete ${conversionRates[key].name}?`)) {
+                delete conversionRates[key];
+                saveRatesToStorage(conversionRates);
+                updateDropdown();
+                openModal();
+                alert('Product deleted successfully!');
+            }
+        }
+
+        // Initialize dropdown on load
+        updateDropdown();
+    </script>
+</body>
 </html>
